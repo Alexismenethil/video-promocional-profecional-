@@ -1,0 +1,12 @@
+# Lo que se genera al probar o hacer un video: nunca va al repo
+node_modules/
+previa/
+rapido/
+verif/
+salida/
+cuadros*/
+audio/
+*.log
+__pycache__/
+.DS_Store
+carta.json

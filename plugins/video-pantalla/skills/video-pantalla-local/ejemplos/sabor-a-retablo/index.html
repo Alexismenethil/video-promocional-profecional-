@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sabor a Retablo — pantalla 15 s</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root {
+    --verde: #0d3b2b;
+    --verde-2: #285b4a;
+    --turquesa: #2f93a8;
+    --turquesa-alto: #3da3b8;
+    --turquesa-luz: #8bcbd7;
+    --turquesa-hondo: #176879;
+    --cacao: #3e2319;
+    --crema: #f9f6ee;
+    --oro: #c6a46a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+  #stage {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--crema); font-family: "Montserrat", sans-serif;
+    -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision;
+  }
+  .abs { position: absolute; left: 0; top: 0; }
+  .scene { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; }
+  .fill { position: absolute; inset: 0; }
+  .display { font-family: "Playfair Display", serif; font-style: italic; font-weight: 500; letter-spacing: -0.015em; line-height: 1; white-space: nowrap; }
+  .kicker { position: absolute; font-weight: 600; font-size: 26px; letter-spacing: .34em; text-transform: uppercase; white-space: nowrap; }
+  .mask { display: inline-block; overflow: hidden; padding: .12em .28em .26em .08em; margin: -.12em -.28em -.26em -.08em; vertical-align: top; }
+  .ch { display: inline-block; will-change: transform; }
+  .arch { position: absolute; overflow: hidden; }
+  .photo { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  .photo img { position: absolute; display: block; }
+  svg.filete { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+  svg.filete path { fill: none; stroke: var(--oro); stroke-width: 2.5; }
+
+  /* ── Café ── */
+  #scCafe .bg { background: radial-gradient(ellipse 75% 90% at 64% 48%, #1c5c46 0%, #114635 42%, #0b3327 100%); }
+  #cafeTitle { position: absolute; left: 150px; top: 368px; font-size: 290px; color: var(--crema); }
+  #cafeKicker { left: 162px; top: 318px; color: var(--turquesa-luz); }
+  #cafeList { position: absolute; left: 162px; top: 716px; font-size: 38px; font-weight: 500; color: rgba(249,246,238,.9); line-height: 1.5; letter-spacing: .01em; }
+  #cafeList .it { display: inline-block; }
+  #cafeList .dot { display: inline-block; color: var(--oro); padding: 0 .45em; }
+  #cafeVapor { position: absolute; left: 0; top: 0; width: 560px; height: 720px; }
+
+  /* ── Crepes ── */
+  #scCrepe .bg { background: url(assets/yeso.webp) 50% 50% / 2400px auto no-repeat; }
+  #scCrepe .tint { background: radial-gradient(ellipse 60% 70% at 70% 45%, rgba(255,255,255,.35), rgba(255,255,255,0) 70%); }
+  #crepeTitle { position: absolute; left: 136px; top: 382px; font-size: 246px; color: var(--verde); }
+  #crepeKicker { left: 152px; top: 318px; color: var(--turquesa-hondo); }
+  #crepeSub { position: absolute; left: 154px; top: 700px; font-size: 38px; font-weight: 500; color: var(--verde-2); letter-spacing: .01em; white-space: nowrap; }
+  #banda { position: absolute; left: -40px; top: 930px; width: 2000px; height: 96px; background: var(--verde); overflow: hidden; }
+  #bandaTira { position: absolute; left: 0; top: 0; height: 96px; display: flex; align-items: center; white-space: nowrap; }
+  #bandaTira span { font-weight: 600; font-size: 30px; letter-spacing: .22em; text-transform: uppercase; color: var(--crema); }
+  #bandaTira img { width: 34px; height: 34px; margin: 0 38px; }
+
+  /* ── Helados ── */
+  #scHelado .bg { background: radial-gradient(ellipse 80% 85% at 50% 42%, #43a9bd 0%, #2f93a8 45%, #1f7285 100%); }
+  #heladoTitle { position: absolute; left: 0; width: 1920px; text-align: center; top: 104px; font-size: 226px; color: var(--crema); }
+  #heladoKicker { left: 0; width: 1920px; text-align: center; top: 62px; color: rgba(243,251,251,.92); padding-left: .34em; }
+  .bola { position: absolute; left: 0; top: 0; width: 236px; transform-origin: 50% 100%; }
+  .bola img { display: block; width: 100%; height: auto; }
+  .sombra { position: absolute; width: 210px; height: 38px; border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(8,48,58,.55) 0%, rgba(8,48,58,.25) 45%, rgba(8,48,58,0) 72%); }
+  .sabor { position: absolute; width: 300px; text-align: center; font-weight: 700; font-size: 25px; letter-spacing: .2em;
+    padding-left: .2em; text-transform: uppercase; color: var(--crema); white-space: nowrap; }
+
+  /* ── Retablo ── */
+  #world { width: 1920px; height: 1080px; transform-origin: 0 0; }
+  #yeso { left: -120px; top: -120px; width: 2160px; height: 1320px; background: url(assets/yeso.webp) 50% 50% / 2520px auto no-repeat; }
+  #rayosCaja { left: -120px; top: -120px; width: 2160px; height: 1320px; overflow: hidden; }
+  #rayos { left: 0; top: 0; width: 1600px; height: 1600px; border-radius: 50%; transform-origin: 50% 50%;
+    background: repeating-conic-gradient(from 0deg, rgba(255,244,214,0) 0deg, rgba(255,244,214,.9) 3deg, rgba(255,244,214,0) 7.5deg);
+    -webkit-mask-image: radial-gradient(circle at center, #000 0%, rgba(0,0,0,.55) 22%, rgba(0,0,0,0) 62%);
+            mask-image: radial-gradient(circle at center, #000 0%, rgba(0,0,0,.55) 22%, rgba(0,0,0,0) 62%); }
+  #retablo { width: 1254px; height: 1254px; transform-origin: 0 0; perspective: 2100px; perspective-origin: 629px 700px; transform-style: preserve-3d; }
+  #luzNicho { left: 423px; top: 439px; width: 412px; height: 515px;
+    background: radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,246,222,.95) 0%, rgba(255,232,186,.55) 40%, rgba(255,226,170,0) 78%); }
+  #caja { left: 332px; top: 107px; filter: drop-shadow(0 22px 26px rgba(52,38,20,.30)); }
+  .puerta { position: absolute; top: 404px; width: 300px; height: 632px; transform-style: preserve-3d; }
+  #puertaIzq { left: 332px; transform-origin: 0 50%; }
+  #puertaDer { left: 637px; transform-origin: 100% 50%; }
+  .cara { position: absolute; top: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .cara img { display: block; }
+  .cara .sombreado { position: absolute; inset: 0; background: #1d160c; opacity: 0; }
+  .dorso { transform: rotateY(180deg); }
+  .canto { position: absolute; top: 4px; width: 16px; height: 624px; background: linear-gradient(90deg, #d9d0bd, #efe8d8 45%, #cfc5b0); }
+  #puertaIzq .canto { left: 292px; transform-origin: 100% 50%; transform: rotateY(90deg); }
+  #puertaDer .canto { left: -8px; transform-origin: 0% 50%; transform: rotateY(-90deg); }
+
+  /* ── Cierre de marca ── */
+  #logo { width: 1014px; height: 530px; transform-origin: 0 0; }
+  #lgFlor { left: 393px; top: 2px; width: 228px; height: 229px; transform-origin: 50% 50%; }
+  #lgNombre { left: 0; top: 226px; }
+  #lgBrillo { left: 0; top: 226px; width: 1014px; height: 232px; mix-blend-mode: screen;
+    -webkit-mask-image: url(assets/logo-nombre.png); mask-image: url(assets/logo-nombre.png);
+    -webkit-mask-size: 1014px 232px; mask-size: 1014px 232px; }
+  #lgFilete { left: 0; top: 458px; transform-origin: 507px 50%; }
+  #lgBajada { left: 0; top: 481px; transform-origin: 507px 50%; }
+  #lema { position: absolute; width: 1100px; text-align: center; font-family: "Playfair Display", serif; font-style: italic; font-weight: 400;
+    font-size: 50px; line-height: 1.32; color: var(--verde); }
+  #lema .w { display: inline-block; }
+
+  #marca { left: 1782px; top: 42px; width: 96px; height: 96px; border-radius: 50%; background: var(--crema); box-shadow: 0 6px 18px rgba(10,30,24,.28); }
+  #marca img { position: absolute; left: 9px; top: 9px; width: 78px; height: 78px; }
+  #fx, #grano { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+  #grano { mix-blend-mode: overlay; opacity: .075; }
+  #viñeta { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 78% 78% at 50% 50%, rgba(0,0,0,0) 62%, rgba(20,14,6,.22) 100%); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 01 · Café -->
+  <div id="scCafe" class="scene">
+    <div class="bg fill"></div>
+    <svg class="filete" id="cafeFilete" width="1920" height="1080"><path/></svg>
+    <div id="cafeArco" class="arch"><div id="cafeFoto" class="photo"><img alt=""></div><canvas id="cafeVapor"></canvas></div>
+    <div id="cafeKicker" class="kicker">Preparado al momento</div>
+    <div id="cafeTitle" class="display" data-split>Café</div>
+    <div id="cafeList"></div>
+  </div>
+
+  <!-- 02 · Crepes -->
+  <div id="scCrepe" class="scene">
+    <div class="bg fill"></div>
+    <div class="tint fill"></div>
+    <svg class="filete" id="crepeFileteA" width="1920" height="1080"><path/></svg>
+    <svg class="filete" id="crepeFileteB" width="1920" height="1080"><path/></svg>
+    <div id="crepeArcoA" class="arch"><div id="crepeFotoA" class="photo"><img alt=""></div></div>
+    <div id="crepeArcoB" class="arch"><div id="crepeFotoB" class="photo"><img alt=""></div></div>
+    <div id="crepeKicker" class="kicker">Dulces y salados</div>
+    <div id="crepeTitle" class="display" data-split>Crepes</div>
+    <div id="banda"><div id="bandaTira"></div></div>
+  </div>
+
+  <!-- 03 · Helados -->
+  <div id="scHelado" class="scene">
+    <div class="bg fill"></div>
+    <div id="heladoKicker" class="kicker">Elige tus sabores</div>
+    <div id="heladoTitle" class="display" data-split>Helados</div>
+    <div id="bolas"></div>
+  </div>
+
+  <!-- El retablo: yeso con la hornacina calada, caja y puertas en 3D -->
+  <div id="world" class="abs">
+    <div id="yeso" class="abs"></div>
+    <div id="rayosCaja" class="abs"><div id="rayos" class="abs"></div></div>
+    <div id="retablo" class="abs">
+      <div id="luzNicho" class="abs"></div>
+      <img id="caja" class="abs" src="assets/retablo-caja.png" srcset="assets/retablo-caja.png 1x, assets/retablo-caja@2x.png 2x" alt="">
+      <div id="puertaIzq" class="puerta">
+        <div class="cara frente" style="left:-6px"><img src="assets/puerta-izq-frente.png" srcset="assets/puerta-izq-frente.png 1x, assets/puerta-izq-frente@2x.png 2x" alt=""><div class="sombreado"></div></div>
+        <div class="cara dorso" style="left:0;top:-5px"><img src="assets/puerta-izq-dorso.png" srcset="assets/puerta-izq-dorso.png 1x, assets/puerta-izq-dorso@2x.png 2x" alt="" style="width:300px;height:639px"><div class="sombreado"></div></div>
+        <div class="canto"></div>
+      </div>
+      <div id="puertaDer" class="puerta">
+        <div class="cara frente" style="left:-5px"><img src="assets/puerta-der-frente.png" srcset="assets/puerta-der-frente.png 1x, assets/puerta-der-frente@2x.png 2x" alt=""><div class="sombreado"></div></div>
+        <div class="cara dorso" style="left:3px;top:-5px"><img src="assets/puerta-der-dorso.png" srcset="assets/puerta-der-dorso.png 1x, assets/puerta-der-dorso@2x.png 2x" alt="" style="width:297px;height:634px"><div class="sombreado"></div></div>
+        <div class="canto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firma -->
+  <div id="firma" class="abs" style="width:1920px;height:1080px">
+    <div id="logo" class="abs">
+      <img id="lgNombre" class="abs" src="assets/logo-nombre.png" srcset="assets/logo-nombre.png 1x, assets/logo-nombre@2x.png 2x" alt="">
+      <div id="lgBrillo" class="abs"></div>
+      <img id="lgFilete" class="abs" src="assets/logo-filete.png" srcset="assets/logo-filete.png 1x, assets/logo-filete@2x.png 2x" alt="">
+      <img id="lgBajada" class="abs" src="assets/logo-bajada.png" srcset="assets/logo-bajada.png 1x, assets/logo-bajada@2x.png 2x" alt="">
+      <img id="lgFlor" class="abs" src="assets/flor.webp" alt="">
+    </div>
+    <div id="lema"><div class="ln"><span class="w">Momentos</span> <span class="w">que</span> <span class="w">se</span> <span class="w">disfrutan,</span></div><div class="ln"><span class="w">recuerdos</span> <span class="w">que</span> <span class="w">se</span> <span class="w">quedan.</span></div></div>
+  </div>
+
+  <div id="marca" class="abs"><img src="assets/flor.webp" alt=""></div>
+  <canvas id="fx" width="1920" height="1080"></canvas>
+  <div id="viñeta"></div>
+  <canvas id="grano" width="960" height="540"></canvas>
+</div>
+<script src="cues.js"></script>
+<script src="assets/datos.js"></script>
+<script src="anim.js"></script>
+</body>
+</html>

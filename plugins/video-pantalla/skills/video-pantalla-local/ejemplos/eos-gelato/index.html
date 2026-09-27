@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>EOS Gelato · pantalla</title>
+<style>
+  @font-face { font-family: "Cormorant"; src: url(assets/fonts/cormorant.woff2) format("woff2"); font-weight: 300 700; font-style: normal; }
+  @font-face { font-family: "Cormorant"; src: url(assets/fonts/cormorant-italica.woff2) format("woff2"); font-weight: 300 700; font-style: italic; }
+  @font-face { font-family: "Manrope"; src: url(assets/fonts/manrope.woff2) format("woff2"); font-weight: 200 800; }
+
+  :root {
+    --marfil: #faf7ef;
+    --marfil-hondo: #f1e8d8;
+    --crema: #fff4df;
+    --bosque: #1b2c1a;
+    --bosque-2: #243924;
+    --salvia: #476644;
+    --oro: #b07d36;
+    --oro-alto: #c99a52;
+    --oro-hondo: #84571f;
+    --hilo: #cab28c;
+    --frambuesa: #7d2542;
+    --frambuesa-honda: #5a1830;
+    --rosa: #f3b3c5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--marfil); }
+  #stage { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--marfil); }
+  .capa { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  img { display: block; }
+
+  /* ── el muro de la casa ── */
+  #fondo {
+    background:
+      radial-gradient(ellipse 60% 52% at 50% 44%, rgba(214, 170, 96, 0.13), transparent 72%),
+      radial-gradient(ellipse 120% 90% at 50% 50%, var(--marfil) 55%, var(--marfil-hondo) 100%);
+  }
+  .hoja { position: absolute; transform-origin: 0 0; will-change: transform; }
+  .hoja.sombra { filter: brightness(0) blur(14px); opacity: 0.13; }
+
+  /* ── el logo en verde bosque ── */
+  #logo, #logoBrillo { overflow: visible; }
+
+  /* ── ventanas: cada letra muestra una foto ── */
+  .ventana, .nivel { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  .ventana img { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+  #heroeLuz { position: absolute; left: 0; top: 0; width: 900px; height: 900px; margin: -450px 0 0 -450px;
+    background: radial-gradient(closest-side, rgba(255, 214, 140, 0.55), rgba(255, 170, 70, 0.18) 45%, transparent 100%);
+    mix-blend-mode: screen; pointer-events: none; }
+  #heroeVelo { background: linear-gradient(100deg, rgba(20, 16, 10, 0.55) 0%, rgba(20, 16, 10, 0.25) 32%, transparent 55%); }
+  #heroeMarco { background: var(--crema); }
+  #heroeSombra { filter: blur(30px); }
+  #heroeSombra > div { background: rgba(0, 0, 0, 0.7); }
+
+  /* ── textos ── */
+  .rotulo { font-family: "Manrope"; font-weight: 700; text-transform: uppercase; letter-spacing: 0.24em; white-space: nowrap; }
+  .titulo { font-family: "Cormorant"; font-style: italic; font-weight: 500; line-height: 0.92; white-space: nowrap; letter-spacing: -0.012em; }
+  .linea { display: block; overflow: hidden; padding: 0.06em 0.12em 0.14em; margin: -0.06em -0.12em -0.14em; }
+  .linea > span { display: inline-block; will-change: transform; }
+
+  #heroeTexto { position: absolute; left: 118px; top: 150px; color: var(--crema); }
+  #heroeTexto .rotulo { font-size: 22px; color: #ffe2b0; margin-bottom: 18px; }
+  #heroeTexto .titulo { font-size: 190px; text-shadow: 0 6px 40px rgba(20, 10, 0, 0.35); }
+
+  /* ── la vitrina: gelatos y sorbetes sobre verde bosque ── */
+  #vitrina { background:
+      radial-gradient(ellipse 55% 60% at 62% 50%, rgba(214, 160, 80, 0.20), transparent 70%),
+      radial-gradient(ellipse 110% 100% at 55% 45%, #25391f 0%, #1a2a18 55%, #111c10 100%); }
+  #vitrinaFila { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 600px, #000 740px); mask-image: linear-gradient(90deg, transparent 600px, #000 740px); }
+  .pieza { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+  .arco { position: absolute; left: 0; top: 0; background: var(--crema); padding: 7px;
+    box-shadow: 0 34px 60px -28px rgba(0, 0, 0, 0.7), 0 0 70px -8px rgba(255, 196, 120, 0.22); }
+  .arco .foto { position: relative; width: 100%; height: 100%; overflow: hidden; background: #3a2a22; }
+  .arco .foto img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .etiqueta { position: absolute; left: 0; text-align: center; will-change: transform, opacity; }
+  .etiqueta .nombre { font-family: "Cormorant"; font-style: italic; font-weight: 500; font-size: 40px; line-height: 1.05; white-space: nowrap; }
+  .etiqueta .rotulo { font-size: 14px; margin-top: 10px; }
+  #vitrina .nombre { color: var(--crema); }
+  #vitrina .etiqueta .rotulo { color: var(--oro-alto); }
+  #vitrinaTexto { position: absolute; left: 110px; top: 318px; color: var(--crema); }
+  #vitrinaTexto .rotulo { font-size: 18px; color: var(--oro-alto); margin-bottom: 26px; }
+  #vitrinaTexto .t1 { font-size: 168px; }
+  #vitrinaTexto .t2 { font-size: 104px; color: var(--oro-alto); margin-top: 6px; }
+
+  /* ── el jarabe de frambuesa ── */
+  #goteo { pointer-events: none; }
+
+  /* ── bebidas: carrusel de arcos sobre frambuesa ── */
+  #bebidasFondo { background:
+      radial-gradient(ellipse 60% 55% at 50% 58%, rgba(255, 170, 150, 0.16), transparent 70%),
+      radial-gradient(ellipse 110% 100% at 50% 50%, #8c2b4b 0%, #6e1f3b 50%, #4a1228 100%); }
+  #carrusel { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; perspective: 2000px; perspective-origin: 960px 560px; }
+  #anillo { position: absolute; left: 960px; top: 612px; width: 0; height: 0; transform-style: preserve-3d; }
+  #anillo .arco { backface-visibility: hidden; box-shadow: 0 30px 50px -26px rgba(30, 0, 10, 0.75), 0 0 60px -10px rgba(255, 190, 170, 0.18); }
+  #bebidasTexto { position: absolute; left: 0; top: 70px; width: 1920px; text-align: center; color: var(--crema); }
+  #bebidasTexto .rotulo { font-size: 18px; color: var(--rosa); margin-bottom: 16px; }
+  #bebidasTexto .titulo { font-size: 104px; }
+  #bebidasTexto .titulo em { font-style: italic; color: var(--rosa); }
+  #frente { position: absolute; left: 0; top: 916px; width: 1920px; text-align: center; color: var(--crema); }
+  #frente .nombre { font-size: 50px; }
+  #frente .rotulo { color: var(--rosa); font-size: 15px; margin-top: 12px; }
+
+  /* ── la firma ── */
+  #firma { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  #filete { position: absolute; left: 750px; top: 640px; width: 420px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hilo) 22%, var(--hilo) 78%, transparent); transform-origin: 50% 50%; }
+  #rombo { position: absolute; left: 956px; top: 636px; width: 9px; height: 9px; background: var(--oro); transform: rotate(45deg); }
+  #lema { position: absolute; left: 0; top: 668px; width: 1920px; text-align: center; font-family: "Cormorant"; font-weight: 500;
+    font-size: 60px; line-height: 1.1; color: var(--bosque); letter-spacing: -0.01em; }
+  #lema em { font-style: italic; color: var(--oro-hondo); }
+  #lema .linea { display: inline-block; vertical-align: top; }
+
+  #fx { pointer-events: none; }
+  #viñeta { background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.5) 100%); pointer-events: none; }
+  #grano { width: 1920px; height: 1080px; opacity: 0.06; mix-blend-mode: overlay; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="fondo" class="capa"></div>
+  <div id="hojas" class="capa"></div>
+  <canvas id="virutas" class="capa" width="1920" height="1080"></canvas>
+  <svg id="logo" class="capa" viewBox="0 0 1920 1080">
+    <defs>
+      <linearGradient id="brilloGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+        <stop offset="0" stop-color="#fff8e8" stop-opacity="0"/>
+        <stop offset="0.5" stop-color="#fff0cf" stop-opacity="0.42"/>
+        <stop offset="1" stop-color="#fff8e8" stop-opacity="0"/>
+      </linearGradient>
+      <clipPath id="logoClip"><path id="logoClipPath" clip-rule="evenodd"/></clipPath>
+    </defs>
+    <path id="logoPath" fill="#1b2c1a" fill-rule="evenodd"/>
+    <g clip-path="url(#logoClip)"><rect id="brilloBanda" x="0" y="0" width="220" height="1400" fill="url(#brilloGrad)" style="mix-blend-mode: screen"/></g>
+  </svg>
+  <div id="vE" class="ventana"><div class="nivel"><img alt=""></div></div>
+  <div id="vS" class="ventana"><div class="nivel"><img alt=""></div></div>
+
+  <div id="vitrina" class="capa">
+    <canvas id="virutasVitrina" class="capa" width="1920" height="1080"></canvas>
+    <div id="vitrinaFila"></div>
+    <div id="vitrinaTexto">
+      <div class="rotulo linea"><span>Hechos en casa</span></div>
+      <div class="titulo t1 linea"><span>Gelatos</span></div>
+      <div class="titulo t2 linea"><span>y sorbetes</span></div>
+    </div>
+  </div>
+
+  <div id="heroeSombra" class="capa"><div class="capa"></div></div>
+  <div id="heroeMarco" class="capa"></div>
+  <div id="vO" class="ventana"><div class="nivel"><img alt=""><div id="heroeLuz"></div><div id="heroeVelo" class="capa"></div></div></div>
+  <div id="heroeTexto">
+    <div class="rotulo linea"><span>Gelato artesanal</span></div>
+    <div class="titulo linea"><span>Maracuyá</span></div>
+  </div>
+
+  <canvas id="goteo" class="capa" width="1920" height="1080"></canvas>
+
+  <div id="bebidas" class="capa"><div id="bebidasNivel" class="capa">
+    <div id="bebidasFondo" class="capa"></div>
+    <canvas id="bokeh" class="capa" width="1920" height="1080"></canvas>
+    <canvas id="virutasBebidas" class="capa" width="1920" height="1080"></canvas>
+    <div id="carrusel"><div id="anillo"></div></div>
+    <div id="bebidasTexto">
+      <div class="rotulo linea"><span>Para tomar</span></div>
+      <div class="titulo linea"><span>Milkshakes, <em>sodas y frozen</em></span></div>
+    </div>
+    <div id="frente" class="etiqueta"><div class="nombre"></div><div class="rotulo"></div></div>
+  </div></div>
+
+  <div id="firma">
+    <div id="filete"></div><div id="rombo"></div>
+    <div id="lema"><span class="linea"><span>Gelato artesanal</span></span> <span class="linea"><span><em>en Ayacucho</em></span></span></div>
+  </div>
+
+  <canvas id="fx" class="capa" width="1920" height="1080"></canvas>
+  <div id="viñeta" class="capa"></div>
+  <canvas id="grano" class="capa" width="960" height="540"></canvas>
+</div>
+<script src="cues.js"></script>
+<script src="assets/logo.js"></script>
+<script src="assets/datos.js"></script>
+<script src="anim.js"></script>
+</body>
+</html>

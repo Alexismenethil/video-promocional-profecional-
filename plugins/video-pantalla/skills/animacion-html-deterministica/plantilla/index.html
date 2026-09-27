@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pantalla del local</title>
+<style>
+  /* Fuentes de la marca: copiarlas a assets/fonts/ (ver skill marca-y-carta-publicada).
+     Si faltan, cae en Georgia / Helvetica y la plantilla igual funciona. */
+  @font-face { font-family: "Display"; src: url(assets/fonts/display.woff2) format("woff2"); font-weight: 300 700; font-style: normal; }
+  @font-face { font-family: "Display"; src: url(assets/fonts/display-italica.woff2) format("woff2"); font-weight: 300 700; font-style: italic; }
+  @font-face { font-family: "Texto"; src: url(assets/fonts/texto.woff2) format("woff2"); font-weight: 200 800; }
+
+  /* ── tokens de la marca: lo primero que se cambia en un video nuevo ── */
+  :root {
+    --muro: #faf7ef;         /* fondo claro de la firma */
+    --muro-hondo: #f1e8d8;
+    --tinta: #1b2c1a;        /* color del nombre */
+    --acento: #84571f;       /* itálica del lema, rombo */
+    --hilo: #cab28c;         /* filete */
+    --crema: #fff4df;        /* texto sobre escenas oscuras, marcos de los arcos */
+    --escenaB: #1f331f;      /* color de la escena B */
+    --escenaB-luz: #2c4a28;
+    --acentoB: #c99a52;
+    --escenaC: #6e1f3b;      /* color de la escena C (y del jarabe) */
+    --escenaC-luz: #8c2b4b;
+    --acentoC: #f3b3c5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--muro); }
+  #stage { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--muro); }
+  .capa { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  img { display: block; }
+
+  /* textos */
+  .rotulo { font-family: "Texto", "Helvetica Neue", Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.24em; white-space: nowrap; }
+  .titulo { font-family: "Display", Georgia, serif; font-style: italic; font-weight: 500; line-height: 0.95; white-space: nowrap; letter-spacing: -0.012em; }
+  .linea { display: block; overflow: hidden; padding: 0.06em 0.12em 0.16em; margin: -0.06em -0.12em -0.16em; }
+  .linea > span { display: inline-block; will-change: transform; }
+
+  /* A · la firma (primer y último cuadro: el punto del bucle) */
+  #fondo { background:
+      radial-gradient(ellipse 60% 52% at 50% 44%, rgba(214, 170, 96, 0.13), transparent 72%),
+      radial-gradient(ellipse 120% 90% at 50% 50%, var(--muro) 55%, var(--muro-hondo) 100%); }
+  #nombre { position: absolute; left: 0; top: 300px; width: 1920px; text-align: center; font-family: "Display", Georgia, serif;
+    font-weight: 600; font-size: 230px; line-height: 1; color: var(--tinta); letter-spacing: -0.02em; }
+  #nombre .brillo { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255, 244, 214, 0.55) 50%, transparent 60%);
+    -webkit-background-clip: text; background-clip: text; color: transparent; background-size: 300% 100%; }
+  #filete { position: absolute; left: 750px; top: 640px; width: 420px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hilo) 22%, var(--hilo) 78%, transparent); }
+  #rombo { position: absolute; left: 956px; top: 636px; width: 9px; height: 9px; background: var(--acento); }
+  #lema { position: absolute; left: 0; top: 668px; width: 1920px; text-align: center; font-family: "Display", Georgia, serif;
+    font-weight: 500; font-size: 60px; line-height: 1.1; color: var(--tinta); }
+  #lema em { font-style: italic; color: var(--acento); }
+  #lema .linea { display: inline-block; vertical-align: top; }
+
+  /* B · vitrina de arcos */
+  #escenaB { background: radial-gradient(ellipse 55% 60% at 62% 50%, rgba(214, 160, 80, 0.2), transparent 70%),
+      radial-gradient(ellipse 110% 100% at 55% 45%, var(--escenaB-luz) 0%, var(--escenaB) 55%, #111c10 100%); }
+  #fila { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 600px, #000 740px); mask-image: linear-gradient(90deg, transparent 600px, #000 740px); }
+  .pieza { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+  .arco { position: absolute; left: 0; top: 0; background: var(--crema); padding: 7px;
+    box-shadow: 0 34px 60px -28px rgba(0, 0, 0, 0.7), 0 0 70px -8px rgba(255, 196, 120, 0.22); }
+  .arco .foto { position: relative; width: 100%; height: 100%; overflow: hidden; background: #3a2a22; }
+  .arco .foto img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .etiqueta { position: absolute; left: 0; text-align: center; color: var(--crema); will-change: transform, opacity; }
+  .etiqueta .nombre { font-family: "Display", Georgia, serif; font-style: italic; font-weight: 500; font-size: 40px; line-height: 1.05; white-space: nowrap; }
+  .etiqueta .rotulo { font-size: 14px; margin-top: 10px; }
+  #escenaB .etiqueta .rotulo { color: var(--acentoB); }
+  #textoB { position: absolute; left: 110px; top: 318px; color: var(--crema); }
+  #textoB .rotulo { font-size: 18px; color: var(--acentoB); margin-bottom: 26px; }
+  #textoB .t1 { font-size: 168px; }
+  #textoB .t2 { font-size: 104px; color: var(--acentoB); margin-top: 6px; }
+
+  /* C · carrusel 3D */
+  #fondoC { background: radial-gradient(ellipse 60% 55% at 50% 58%, rgba(255, 170, 150, 0.16), transparent 70%),
+      radial-gradient(ellipse 110% 100% at 50% 50%, var(--escenaC-luz) 0%, var(--escenaC) 50%, #4a1228 100%); }
+  #carrusel { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; perspective: 2000px; perspective-origin: 960px 560px; }
+  #anillo { position: absolute; left: 960px; top: 612px; width: 0; height: 0; transform-style: preserve-3d; }
+  #anillo .arco { backface-visibility: hidden; }
+  #textoC { position: absolute; left: 0; top: 70px; width: 1920px; text-align: center; color: var(--crema); }
+  #textoC .rotulo { font-size: 18px; color: var(--acentoC); margin-bottom: 16px; }
+  #textoC .titulo { font-size: 104px; }
+  #textoC .titulo em { color: var(--acentoC); }
+  #frente { position: absolute; left: 0; top: 916px; width: 1920px; text-align: center; color: var(--crema); }
+  #frente .nombre { font-size: 50px; }
+  #frente .rotulo { color: var(--acentoC); font-size: 15px; margin-top: 12px; }
+
+  #viñeta { background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.5) 100%); pointer-events: none; }
+  #grano { width: 1920px; height: 1080px; opacity: 0.06; mix-blend-mode: overlay; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="fondo" class="capa"></div>
+  <canvas id="virutasA" class="capa"></canvas>
+  <div id="firma" class="capa">
+    <div id="nombre"><span class="texto"></span><span class="brillo" aria-hidden="true"></span></div>
+    <div id="filete"></div><div id="rombo"></div>
+    <div id="lema"><span class="linea"><span id="lema1"></span></span> <span class="linea"><span><em id="lema2"></em></span></span></div>
+  </div>
+
+  <div id="escenaB" class="capa">
+    <canvas id="virutasB" class="capa"></canvas>
+    <div id="fila"></div>
+    <div id="textoB">
+      <div class="rotulo linea"><span id="rotuloB"></span></div>
+      <div class="titulo t1 linea"><span id="tituloB"></span></div>
+      <div class="titulo t2 linea"><span id="acentoB"></span></div>
+    </div>
+  </div>
+
+  <canvas id="goteo" class="capa"></canvas>
+
+  <div id="escenaC" class="capa">
+    <div id="fondoC" class="capa"></div>
+    <canvas id="virutasC" class="capa"></canvas>
+    <div id="carrusel"><div id="anillo"></div></div>
+    <div id="textoC">
+      <div class="rotulo linea"><span id="rotuloC"></span></div>
+      <div class="titulo linea"><span><span id="tituloC"></span> <em id="acentoC"></em></span></div>
+    </div>
+    <div id="frente" class="etiqueta"><div class="nombre"></div><div class="rotulo"></div></div>
+  </div>
+
+  <div id="viñeta" class="capa"></div>
+  <canvas id="grano" class="capa" width="960" height="540"></canvas>
+</div>
+<script src="cues.js"></script>
+<script src="assets/datos.js"></script>
+<script src="anim.js"></script>
+</body>
+</html>

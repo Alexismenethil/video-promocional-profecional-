@@ -1,0 +1,7 @@
+{
+  "name": "video-pantalla",
+  "description": "Videos promocionales de 15 s en bucle para la pantalla de un negocio: motion design en código (HTML + Chrome), fotos reales de la carta publicada, sonido sintetizado y exportación en 4K 60, 1080 60 y 1080 30, con música y solo efectos.",
+  "version": "1.0.0",
+  "author": { "name": "Alexis Huamani" },
+  "keywords": ["video", "motion", "pantalla", "negocio", "carta", "4k", "sonido", "promocional"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "video-promocional",
+  "description": "Skills para hacer videos promocionales de pantalla de negocio, cada vez mejores.",
+  "owner": { "name": "Alexis Huamani" },
+  "plugins": [
+    {
+      "name": "video-pantalla",
+      "source": "./plugins/video-pantalla",
+      "description": "Videos de 15 s en bucle para la TV del local: idea desde la marca, animación en código, fotos reales, sonido y exportación 4K/1080."
+    }
+  ]
+}
