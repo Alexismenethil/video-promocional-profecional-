@@ -76,6 +76,15 @@ regenera igual. Ver `../video-pantalla-local/ejemplos/*/prep.py`.
 | `recortar_fondo_blanco.py hoja.jpg assets/hojas.png --piezas 2` | objetos sobre blanco de estudio → PNG con alfa |
 | `quitar_base_lisa.py bola.webp assets/bolas/x.png` | quita la base lisa de estudio pegada a un recorte (bolas de helado) |
 | `doble.py a.webp b.png …` | versiones @2x (Lanczos + nitidez) para lo que en 4K se ve grande |
+| `mascara_vision.swift` (`swiftc -O … -o mascara_vision`; `./mascara_vision foto.webp m.png`) | recorte de sujeto de macOS (Vision), local: máscara de 16 bits de platos, copas y vasos con su fondo real. Para el estilo «producto sobre color» |
+| `hoja_recortes.py salida.jpg slug…` | hoja de contactos de recortes sobre tres colores de la marca, para juzgar bordes |
+
+Recortes con Vision (Sabor a Retablo, menu board): el filo semitransparente trae el fondo del local;
+no restarlo dividiendo por alfa (satura y deja halo): darle al filo el color del interior más cercano
+(`distance_transform_edt(..., return_indices=True)`). **Antes de elegir una foto, mirar si la máscara
+toca el borde de la foto**: un plato o un pie cortados por el encuadre quedan con un lado recto sobre
+color (pasó con la Crepa Tropical, la Galaxia y el Milkshake de Oreo). Elegir fotos completas o tapar
+el corte con otro producto delante.
 
 Notas:
 - Logo: si el PNG no tiene alfa, se usa la tinta oscura. Letras con puntos o tildes se agrupan solas.

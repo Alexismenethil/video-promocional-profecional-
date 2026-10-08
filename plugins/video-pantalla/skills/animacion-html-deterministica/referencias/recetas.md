@@ -191,3 +191,36 @@ Grano: 6 lienzos de ruido fijos (960×540 estirados), `floor(t·30) mod 6`, over
 radial transparente 55 % → negro 0,5, opacidad 0,16 en la firma y 0,7 en escenas oscuras. Halo cálido
 detrás de los productos: radial `rgba(214,160,80,.2)`. Bokeh: círculos radiales en `lighter`, corridos
 con el giro del carrusel (paralaje).
+
+## 18. Tablas que giran: prismas de trivisión (Sabor a Retablo, menu board)
+
+La pantalla se parte en N tablas triangulares (eje vertical u horizontal) que giran 120° en ola; la
+cara de adelante lleva la escena que se va y la que gira hacia el frente, la que llega. Las dos
+escenas se dibujan antes en búferes (canvas fuera de pantalla, a DPR) con la misma función de
+escena. Cada cara se proyecta en perspectiva por columnas finas (1,25 px) con la inversa cerrada:
+
+```js
+// prisma i: eje en xc = (i+0,5)·w, z = −a (a = w/(2√3)); cara k con normal φ = θ + k·120°
+const nx = Math.sin(phi), nz = Math.cos(phi), pcx = xc + a * nx, pcz = -a + a * nz;
+if (nx * (c1 - pcx) + nz * (FOCO - pcz) <= 0.5) continue;           // de espaldas a la cámara
+const tx = Math.cos(phi), tz = -Math.sin(phi);                         // borde: P(s) = P0 + s·(dx, dz)
+const x0 = pcx - tx * w / 2, z0 = pcz - tz * w / 2, dX = tx, dZ = tz;
+const pr = (x, z) => c1 + (x - c1) * FOCO / (FOCO - z);                 // FOCO 2300
+const sDe = (xp) => ((xp - c1) * (FOCO - z0) - FOCO * (x0 - c1)) / (FOCO * dX + (xp - c1) * dZ);
+for (let xa = pr(x0, z0); xa < pr(x1, z1); xa += 1.25) {               // una columna de la cara
+  const sa = sDe(xa), sb = sDe(xa + 1.25), kz = FOCO / (FOCO - (z0 + dZ * (sa + sb) / 2));
+  g.drawImage(buf, (xc - w/2 + sa) * DPR, 0, (sb - sa) * DPR, H * DPR,
+              xa, c2 - (c2 + EXT) * kz, 1.25 + 0.6, (H + 2 * EXT) * kz);
+}
+```
+- Ángulo: `−120°·inOutCubic(u)` con u de 0,62 s por tabla, retraso 0,04–0,07 s entre tablas
+  (izquierda→derecha, al revés o desde el centro) + `vaiven(golpe, 3,4, 9)·0,09` al encajar.
+- Luz Lambert normalizada para que en reposo la cara quede igual a la escena; la luz viene del lado
+  de donde gira la cara nueva (entra iluminada, la vieja se apaga). Por encima de 1, un velo
+  `lighter` crema muy suave. Sombreado = un solo trapecio por cara (no por columna).
+- Las tablas sobran 4,5 % por los extremos (`EXT`): si no, al girar aparecen cuñas oscuras.
+- Entre tablas se ve el fondo: el tono hondo de las dos escenas mezclado con negro (0,28), no negro.
+- Ordenar las caras por z antes de dibujar. Tablas horizontales: lo mismo con filas.
+- Sonido: un clac de madera por tabla en su golpe, con el paneo de su lugar en pantalla, y un whoosh
+  que cruza en el sentido de la ola.
+- Submuestras 8 en todo el tramo de la ola.

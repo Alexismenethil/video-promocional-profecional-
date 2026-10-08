@@ -3,9 +3,11 @@
 | Carpeta | Video | Técnicas principales |
 | --- | --- | --- |
 | `sabor-a-retablo/` | café · crepes · helados (120 BPM, huayno-pop) | puertas 3D, portal por la hornacina, estallido de pétalos con física cerrada, vapor, cinta de nombres, bolas que caen con aplastamiento, brillo de color |
+| `sabor-a-retablo-3d/` | menu board de 60 s en 3D (128 BPM, house con zampoña y charango) | three.js con la GPU, submuestras acumuladas en la página (movimiento + lente + antialias), retablo 3D con portal, 12 nichos, productos que flotan, fotos en arcos, motivos de papel recortados de la foto del retablo, polvo dorado que deshace y arma el logo, tablas-prisma, pilastra/cornisa, remolino de hojas, puertas; música con estudio2.py |
+| `sabor-a-retablo-final/` | menu board final de 1:52 (40 productos; 128 BPM) | el retablo 3D abre y cierra; 18 tableros limpios en 3D maquetados en px de diseño (`aMundo`), ventanas en arco para platos cortados, mostrador para vasos cortados, flor-portal con el tablero siguiente en miniatura, empuje, tablas-prisma, látigo, puertas; eventos de sonido exportados desde la página |
 | `eos-gelato/` | gelatos · sorbetes · bebidas (128 BPM, house suave) | letras-ventana con ola, zoom con paralaje por la «O», foto que se encoge en un arco, vitrina por pulsos, jarabe, carrusel 3D, salida por la «S» y vaciado |
 
-Es **solo código** (`index.html`, `anim.js`, `cues.js`, `prep.py`, `audio.py`, `README.md`). No incluye
+Es **solo código** (`index.html`, `anim.js` o `src/`, `cues.js`/`cues.py`, `prep.py`, `audio.py`, `README.md`). No incluye
 los logos, fotos ni fuentes de los negocios: `prep.py` los toma del repo de cada negocio y de su carta
 publicada. Para regenerar uno hace falta ese repo y la URL pública de su carta:
 

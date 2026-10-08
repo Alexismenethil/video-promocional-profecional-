@@ -28,6 +28,12 @@ Busca en este orden y quédate con lo que tenga más fuerza visual:
 Propón 2 o 3 ideas en una línea cada una y elige la que cumpla: nace de la marca, tiene un recorrido
 claro (entrar → recorrer → salir → firmar), cabe en 15 s, y se puede hacer bien con las fotos que hay.
 
+> **Lección (menu board de Sabor a Retablo, 6-oct-2026).** Un inicio/final abstracto (la flor del logo
+> que se abre sobre color plano) «no tiene nada que ver» para el usuario aunque salga del logo: la
+> apertura y el cierre tienen que ser **el objeto de la marca** (el retablo) y la marca debe reconocerse
+> al instante. «Inmersión» = espacio 3D de verdad: cámara que viaja, profundidad, luz, cosas que pasan
+> cerca de la cámara (ver el camino 3D en `animacion-html-deterministica`).
+
 ## 2. Estructura de 15 s en bucle
 
 El primer y el último cuadro son **la firma** (logo + lema): es el punto del bucle y lo que más tiempo
@@ -81,7 +87,8 @@ o con un velo.
 Catálogo con cuándo usar cada una y dónde está la receta: [referencias/transiciones.md](referencias/transiciones.md).
 Las que ya funcionaron: portal por la hornacina (SAR), letras-ventana + zoom con paralaje por una letra
 (EOS), foto que se encoge en un arco (EOS), jarabe que chorrea (EOS), carrusel 3D (EOS), puertas que se
-abren y cierran (SAR), bolas que caen al pulso (SAR), iris (SAR y plantilla).
+abren y cierran (SAR), bolas que caen al pulso (SAR), iris (SAR y plantilla), tablas-prisma que giran en
+ola y portal por el centro de la flor del logo (SAR menu board).
 
 ## 7. Qué hace que se vea «llamativo y bonito»
 

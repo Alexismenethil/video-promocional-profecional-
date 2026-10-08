@@ -33,7 +33,9 @@ until grep -q "listo en" generar4k.log; do sleep 30; done; tail -2 generar4k.log
 - Trabajadores: 6 en 4K (`TRABAJADORES=`), uno **por navegador** (varias pestañas en un Chrome se
   cuelgan con `Runtime.callFunctionOn timed out`). Banderas anti-estrangulamiento incluidas.
 - Referencia: 900 cuadros 4K con K promedio ~4 → 10–15 min en una Mac. Avance en el log cada 30 cuadros.
-- Disco: ~1,5–2,5 GB de JPEG en 4K. Todo en la carpeta temporal, nunca en el repo.
+- Disco: ~1,5–2,5 GB de JPEG en 4K por cada 15 s (2:15 son 23 GB). Todo en la carpeta temporal, nunca en el
+  repo. Mirar `df -h` antes de empezar: tres trabajadores en 4K pueden hacer crecer la memoria virtual
+  ~5 GB en el mismo disco.
 
 `ESCALA=1 node render.mjs video 60` genera 1080 directo (PNG) si no hace falta 4K (~3–4 min); en ese
 caso `exportar.py` se salta el 4K solo.
@@ -50,7 +52,7 @@ NOMBRE=<negocio> python3 exportar.py          # ~3,5 min
 
 La imagen se codifica una vez por formato (`salida/tmp/`) y se le pega cada pista (AAC 256 kb/s, 48 kHz,
 `+faststart`): `…-con-musica-…mp4` y `…-solo-efectos-…mp4`. Variables: `CUADROS`, `PISTA`, `EFECTOS`,
-`SEGUNDOS`, `SALIDA`.
+`SEGUNDOS`, `SALIDA` y `FORMATOS` (`FORMATOS=4k-60fps` saca solo ese, cuando el usuario pide solo el 4K).
 
 ## Si algo falla
 | Problema | Arreglo |

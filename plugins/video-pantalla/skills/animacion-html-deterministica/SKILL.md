@@ -11,6 +11,18 @@ La animación es una página web de **1920×1080 fijos** que expone `window.seek
 página en Chrome sin cabeza, llama a `seek` para cada cuadro (y varias veces por cuadro para el
 desenfoque) y captura. Con `deviceScaleFactor: 2` la misma página sale en 4K nítido.
 
+## Camino 3D (WebGL, three.js) — cuando piden «inmersión»
+Chrome sin cabeza en el Mac usa la GPU (`--use-angle=metal`: ANGLE Metal, WebGL2, texturas float). Con
+three.js la página arma escenas 3D reales y `window.seek(t, K)` promedia **dentro de la página** K
+instantes en un render target HalfFloat: tiempo dentro del obturador (desenfoque de movimiento), cámara
+corrida en un disco de apertura con cizalla de proyección (profundidad de campo) y jitter de subpíxel
+(antialias). Después brillo, curva, viñeta y grano; una sola captura por cuadro. 4K: 0,3–0,75 s por
+cuadro. Código completo y comentado: `../video-pantalla-local/ejemplos/sabor-a-retablo-3d/` (motor,
+portal, nichos, transiciones, textos por glifo, motivos de papel, polvo de partículas). Reglas extra:
+texturas con `colorSpace` sRGB y color sangrado hacia lo transparente; nada de `Math.random` (azar con
+semilla); fotos de producto como planos que miran a la cámara (los platos fotografiados desde arriba,
+**flotando**); cuidado con lo crema bajo un spot (pasa de 1 y florece).
+
 ## Empezar
 La carpeta de trabajo ya trae la plantilla (`video-pantalla-local/scripts/nuevo_proyecto.sh`):
 

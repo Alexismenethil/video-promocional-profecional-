@@ -14,7 +14,7 @@ find "$SAL" -name '*.mp4' -not -path '*/tmp/*' | sort | while read -r f; do
   ffmpeg -nostdin -hide_banner -nostats -i "$f" -af ebur128=peak=true -f null - 2>&1 | grep -E "^\s+(I|Peak):" | tr -s ' ' | tr '\n' ' '
   echo
 done
-UNO=$(find "$SAL" -name '*4k*con-musica*.mp4' -not -path '*/tmp/*' | head -1)
+UNO=$(find "$SAL" -name '*con-musica*4k*.mp4' -not -path '*/tmp/*' | head -1)
 [ -z "$UNO" ] && UNO=$(find "$SAL" -name '*.mp4' -not -path '*/tmp/*' | head -1)
 mkdir -p verif
 for t in "${TIEMPOS[@]}"; do

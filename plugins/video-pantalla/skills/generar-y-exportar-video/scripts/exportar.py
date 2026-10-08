@@ -9,6 +9,7 @@ La imagen se codifica una sola vez por formato y después se le pega cada pista.
 
     NOMBRE=eos-gelato python3 exportar.py
     NOMBRE=… CUADROS=cuadros60_4k PISTA=audio/pista.wav EFECTOS=audio/efectos.wav SEGUNDOS=15 python3 exportar.py
+    NOMBRE=… FORMATOS=4k-60fps python3 exportar.py      (solo los formatos nombrados)
 
 Salida: salida/{4k-60fps,1080-60fps,1080-30fps}/{NOMBRE}-{SEGUNDOS}s-{con-musica|solo-efectos}-{formato}.mp4
 Si falta una de las dos pistas, se exporta solo la que exista.
@@ -44,6 +45,8 @@ FORMATOS = {
 }
 if ancho < 3840:
     FORMATOS.pop("4k-60fps")
+if os.environ.get("FORMATOS"):                     # FORMATOS=4k-60fps → solo esos (separados por comas)
+    FORMATOS = {k: v for k, v in FORMATOS.items() if k in os.environ["FORMATOS"].split(",")}
 PISTAS = {"con-musica": os.environ.get("PISTA", "audio/pista.wav"),
           "solo-efectos": os.environ.get("EFECTOS", "audio/efectos.wav")}
 PISTAS = {k: v for k, v in PISTAS.items() if os.path.exists(v)}

@@ -31,6 +31,15 @@ resorte que rebota contra el tope; cerrar con aceleración (inCubic) y rebote co
 - Sonido: pestillo (madera chica), soplidos laterales al abrir; portazo modal (madera) al cerrar.
 - Receta: «Puertas 3D». SAR: `anguloApertura()`, `anguloPuerta()`.
 
+### Portal por el centro de una flor o un sello (SAR menu board)
+El disco del isotipo (o del sello de precio) se llena del color de la escena siguiente con una onda
+desde el centro y la cámara entra: la flor (en vector) crece ×16 y sus rayos pasan a los costados. Si la
+flor está detrás de los productos, la escena va en capas: los productos crecen más rápido y pasan de
+largo. Su espejo: la escena se encoge dentro del disco, el disco vuelve al verde y la flor se asienta.
+- Duración: llenado 0,5 s; zambullida 1,0 s (inOutQuart); salida 0,95 s.
+- Sonido: burbujas que suben (llenado), riser + whoosh ancho + platillo al revés, impacto al aterrizar;
+  al salir, succión, burbujas que bajan, gelatina que baja y campanas descendentes.
+
 ### Iris (plantilla, SAR)
 Un círculo que se abre desde un punto de interés (el centro del logo) mostrando la escena siguiente; su
 espejo se cierra hacia el logo. Simple, legible, sirve para cualquier marca.
@@ -38,6 +47,15 @@ espejo se cierra hacia el logo. Simple, legible, sirve para cualquier marca.
 - Plantilla: `circulo()` + `clip()`.
 
 ## Medianas (entre escenas)
+
+### Tablas que giran (prismas de trivisión, SAR menu board)
+La pantalla se parte en 6–12 tablas triangulares que giran 120° en ola (de un lado, del otro, desde el
+centro, en filas) y traen la escena siguiente con luz y sombra: el producto se corta en tiras. Es la
+versión 3D de las persianas planas de La Casa del Retablo, y la que el usuario pidió «mucho mejor».
+Se puede repetir en todo un video variando número, eje y sentido (es la firma del tablero).
+- Duración: 0,62 s por tabla, retraso 0,04–0,07 s, la ola entera ~1 s, aterriza en el compás.
+- Sonido: clac de madera por tabla en su golpe (paneado donde está) + whoosh en el sentido de la ola.
+- Receta: «Tablas que giran» (18).
 
 ### La foto se encoge en un arco (EOS)
 La foto a pantalla completa se achica hasta ser un arco de la vitrina; las esquinas de arriba se van
