@@ -344,6 +344,57 @@ de diseño (casi la altura del nombre; 48 en las filas de vasos) y el sello de l
 radio. En un menu board el precio se lee desde lejos: arrancar con el precio del tamaño del nombre, no
 como nota al pie.
 
+## Video 7 · La Casa del Retablo (retablos ayacuchanos, museo y taller de Silvestre Ataucusi) — 12-oct-2026
+
+**Pedido.** «Ahora haremos videos para los retablos»: fotos en `Descargas/Casa del Retablo`, el catálogo
+2025 en PDF (60 págs., precios por tamaño, con el dibujo de medidas 15 × 30 × 7 cm) y el video de la casa
+(vertical, 42 s: fondo rojo, logo, retablo recortado sobre color, persianas) como referencia del inicio,
+«pero muuucho más limpio, inmersivo, fluido». Como Sabor a Retablo (productos con su precio) pero con
+muchos tipos de animación, solo en 4K, «3D aún mucho mejor», «sorpréndeme». Sin repo ni carta publicada:
+la fuente es el PDF.
+
+**Idea.** La casa del logo se vuelve retablo. Logo crema sobre el rojo de la marca; las letras se van y
+bajo el techo del logo sube un retablo real cerrado cuyo frontón calza con ese techo; abre sus puertas con
+golpe de luz y flores, y la cámara entra por el nicho (portal) donde ya están las manos del maestro. Adentro,
+26 tableros de 6 s (120 BPM, 84 compases = 168 s): historia con paralaje, «Elige tu tamaño» (seis tamaños a
+escala sobre piso que refleja), y por tamaño un héroe con sus medidas dibujándose en 3D y el precio en una
+casita, filas, carrusel, pared de galería, piezas únicas, toritos a escala con su precio, espejos con vidrio
+que refleja, ángeles colgando de hilos que se mecen, encargos, el museo y el maestro con el WhatsApp. Cierre
+al revés: sale del nicho, portazo, la casa vuelve a ser el logo.
+
+**Técnica nueva.**
+- **Catálogo PDF como fuente de fotos.** `pdfimages -j -p` y unir cada imagen con su `smask` (la siguiente
+  en `pdfimages -list`): recortes perfectos a 200 ppi (~1500 px). Ojo: el PDF **reutiliza fotos** (tres
+  retablos de S/ 500 con la misma imagen; páginas cuya foto extraída no es la que se ve) → asignar nombres
+  mirando el contenido, y buscar duplicados con una huella de 64×48. Varias fotos de celular traen la marca
+  «Galaxy A55 5G»: se detecta (letras más claras que su entorno) y se rellena empujando colores de
+  alrededor; queda una mancha leve → esas piezas no van en primer plano. La sombra que trae el alfa del PDF
+  (alfa bajo) se quita con umbral; antes de ampliar, «sangrar» el color hacia lo transparente.
+- **Retablo 3D desde una foto frontal con las puertas abiertas** (`retablo3d.js`): bisagras = columnas con
+  poca cobertura de alfa cerca del 25 % y 75 % del ancho; siluetas de caja y puertas (borde de arriba y de
+  abajo por columna, Douglas-Peucker) → `ExtrudeGeometry` con un `UVGenerator` propio (las tapas mapean de
+  vuelta a la foto). La caja es su silueta extruida (techo a dos aguas o arco con cantos de madera); cada
+  puerta, su silueta con grosor colgada de su bisagra; giran π (por fuera, la pintura en espejo un 20 % más
+  oscura, con la normal local en el shader) y al cerrar se escalan para tapar justo media caja. Material
+  Lambert calibrado: cielo 0,40 + sol 0,62 en una cara de frente = el color de la foto.
+- **Sombras suaves sin costo:** luz direccional con sombra 4096² y su dirección repartida en un disco entre
+  submuestras (Halton); la pared lleva un `ShadowMaterial` encima del degradado.
+- **Texturas por tramos:** `seek` es asíncrono y carga solo las fotos de los tableros cercanos (libera las
+  lejanas): 90 fotos de 2400 px sin llenar la GPU.
+- **Textos pegados a la cámara** (capa HUD = cámara × cámara de referencia⁻¹) cuando la cámara orbita: el
+  retablo gira en 3D y los precios no se salen de cuadro.
+- **Lo que falló primero:** el tablero B vacío mientras la transición lo revelaba (las entradas empezaban
+  después del corte). Regla: cada retablo visible desde que B se empieza a ver (cerrado, de espaldas o de
+  canto) y la animación es abrir, girar o voltear; las caídas solo después de látigo o flores.
+- **Apertura y cierre en una sola escena** con reloj tw ∈ [−6, 6): el cierre termina en el estado exacto del
+  inicio (florcitas incluidas). Portal = plano en el nicho con el tablero muestreado en pantalla; el camino
+  de cámara termina **antes** del corte (si la cámara sigue moviéndose en el último cuadro, el corte salta).
+- macOS borró la carpeta temporal tras unos días sin uso: el motor se recuperó de la fuente entregada en
+  `output/`. Entregar siempre la fuente.
+
+**Entrega.** Solo 4K 60 (HEVC), con música (huayno: legüero, chajchas, charango, zampoña, quena, arpa) y
+solo efectos, en `~/Documents/Personal/Casa-del-Retablo/video/` con su fuente.
+
 ## Para el próximo video (ideas pendientes)
 
 - Pedir al cliente las fotos originales en alta (las de la carta vienen a ~1100 px): en 4K una foto a
